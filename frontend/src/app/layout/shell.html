@@ -1,0 +1,85 @@
+<div class="shell">
+  <!-- ============ MENÚ LATERAL ============ -->
+  <aside class="lateral" [class.abierto]="menuAbierto()">
+    <!-- Logotipo -->
+    <div class="logo">
+      <div class="logo-icono">
+        <app-icono nombre="cultivos" [tamano]="20" />
+      </div>
+      <span>AgroControl</span>
+    </div>
+
+    <!-- Módulos permitidos para este usuario -->
+    <nav class="menu">
+      <a
+        class="menu-item"
+        [routerLink]="item.ruta"
+        routerLinkActive="activo"
+        (click)="cerrarMenu()"
+        *ngFor="let item of menu()"
+      >
+        <app-icono [nombre]="item.icono" [tamano]="17" />
+        <span>{{ item.etiqueta }}</span>
+
+        <!-- Insignia con el número de alertas -->
+
+        <span class="insignia" *ngIf="item.ruta === '/alertas' && alertasActivas() > 0">{{
+          alertasActivas()
+        }}</span>
+      </a>
+
+      <p class="menu-vacio" *ngIf="menu().length === 0">Tu rol no tiene módulos asignados.</p>
+    </nav>
+
+    <!-- Tarjeta del usuario (parte inferior del menú) -->
+    <div class="usuario">
+      <div class="avatar">{{ nombreUsuario().charAt(0) }}</div>
+      <div class="usuario-datos">
+        <strong>{{ nombreUsuario() }}</strong>
+        <span>{{ usuario()?.rol }}</span>
+      </div>
+      <button class="icono-boton" title="Cambiar contraseña" (click)="abrirPassword()">
+        <app-icono nombre="usuario" [tamano]="16" />
+      </button>
+      <button class="icono-boton" title="Cerrar sesión" (click)="salir()">
+        <app-icono nombre="salir" [tamano]="16" />
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== VENTANA: CAMBIAR CONTRASEÑA (componente compartido) ===== -->
+  <app-cambio-password [abierto]="modalPassword()" (cerrado)="modalPassword.set(false)" />
+
+  <!-- Capa oscura cuando el menú está abierto en móvil -->
+
+  <div class="capa" (click)="cerrarMenu()" *ngIf="menuAbierto()"></div>
+
+  <!-- ============ CONTENIDO ============ -->
+  <div class="contenido">
+    <!-- Barra superior -->
+    <header class="barra">
+      <button class="icono-boton menu-movil" (click)="menuAbierto.set(true)">
+        <app-icono nombre="menu" [tamano]="20" />
+      </button>
+
+      <div class="buscador">
+        <app-icono nombre="buscar" [tamano]="16" />
+        <input type="text" placeholder="Buscar en AgroControl..." />
+      </div>
+
+      <div class="barra-derecha">
+        <a class="icono-boton" routerLink="/alertas" title="Alertas" *ngIf="alertasActivas() > 0">
+          <app-icono nombre="alertas" [tamano]="18" />
+          <span class="punto-alerta">{{ alertasActivas() }}</span>
+        </a>
+
+        <div class="avatar mini">{{ nombreUsuario().charAt(0) }}</div>
+      </div>
+    </header>
+
+    <!-- Pantalla activa -->
+    <main class="pagina">
+      <router-outlet />
+    </main>
+  </div>
+</div>

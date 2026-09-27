@@ -1,0 +1,194 @@
+/* ============================================================
+   pages/login/login.css
+
+   Estilo del diseño de referencia: un panel grande de "cristal"
+   sobre un fondo verde suave (tipo follaje), con el titular en
+   serif y un botón blanco de pastilla.
+   ============================================================ */
+
+.login {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 26px;
+  padding: 26px;
+  align-items: stretch;
+}
+
+/* ---------- LADO IZQUIERDO: el panel de cristal ---------- */
+.presentacion {
+  position: relative;
+  overflow: hidden;
+  padding: 52px 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  /* Cristal claro: deja ver el verde del fondo */
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 32px;
+  box-shadow: var(--sombra);
+}
+
+/* Capas suaves que evocan las hojas del fondo del diseño */
+.hojas {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 150px 70px at 12% 78%, rgba(63, 122, 82, 0.14), transparent 70%),
+    radial-gradient(ellipse 190px 85px at 86% 16%, rgba(63, 122, 82, 0.11), transparent 70%),
+    radial-gradient(ellipse 120px 60px at 72% 90%, rgba(63, 122, 82, 0.1), transparent 70%),
+    radial-gradient(ellipse 170px 80px at 24% 10%, rgba(63, 122, 82, 0.09), transparent 70%);
+  pointer-events: none;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fuente-titulo);
+  font-size: 21px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 34px;
+  color: var(--primario-fuerte);
+}
+
+.marca-icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: var(--primario-fuerte);
+  display: grid;
+  place-items: center;
+}
+
+/* El titular grande, en serif, como el diseño de referencia */
+.presentacion h1 {
+  font-family: var(--fuente-titulo);
+  font-size: 46px;
+  line-height: 1.12;
+  max-width: 460px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.8px;
+  color: var(--texto);
+  margin-bottom: 4px;
+}
+
+.presentacion p {
+  margin-top: 18px;
+  color: var(--texto-medio);
+  max-width: 420px;
+  font-size: 14.5px;
+  line-height: 1.75;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- LADO DERECHO: el formulario ---------- */
+.formulario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 26px;
+  padding: 34px;
+  box-shadow: var(--sombra);
+}
+
+.tarjeta h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.subtitulo {
+  color: var(--texto-suave);
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.opciones {
+  font-size: 12px;
+  margin: -4px 0 20px;
+}
+
+.opciones a {
+  color: var(--primario-fuerte);
+}
+
+.recordar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+.recordar input {
+  accent-color: var(--primario-fuerte);
+  width: 15px;
+  height: 15px;
+}
+
+.boton {
+  width: 100%;
+  padding: 13px;
+  font-size: 14px;
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.1);
+  border: 1px solid rgba(192, 80, 63, 0.32);
+  color: #a8412f;
+  padding: 10px 13px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.pie {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+/* ---------- MÓVIL ---------- */
+@media (max-width: 900px) {
+  .login {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .presentacion {
+    padding: 34px 26px;
+    min-height: 240px;
+    border-radius: 24px;
+  }
+
+  .presentacion h1 {
+    font-size: 30px;
+  }
+
+  .presentacion p {
+    font-size: 14px;
+  }
+}

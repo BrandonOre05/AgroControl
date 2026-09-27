@@ -1,0 +1,6 @@
+# Hook de Git: se ejecuta ANTES de cada commit.
+# Revisa que el código no tenga errores antes de guardarlo.
+#
+# NOTA: para que este hook funcione, la carpeta debe ser un
+# repositorio de Git. Al ejecutar "pnpm install" se activa solo.
+pnpm run lint

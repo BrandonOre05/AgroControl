@@ -1,0 +1,246 @@
+<header class="encabezado">
+  <div>
+    <h1>Inventario</h1>
+    <p class="texto-suave">Control de insumos, productos y movimientos de almacenaje.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="abrirProducto()" *ngIf="puedeEditar()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Nuevo producto
+  </button>
+</header>
+
+<!-- ===== TARJETAS DE RESUMEN ===== -->
+<div class="rejilla kpis">
+  <div class="card kpi">
+    <div class="icono verde"><app-icono nombre="inventario" [tamano]="18" /></div>
+    <div>
+      <strong>{{ resumen()?.total_productos ?? 0 }}</strong>
+      <span>Almacenamiento</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono ambar"><app-icono nombre="alertas" [tamano]="18" /></div>
+    <div>
+      <strong>{{ (resumen()?.stock_bajo ?? 0) + (resumen()?.agotados ?? 0) }}</strong>
+      <span>Alertas de stock</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono azul"><app-icono nombre="check" [tamano]="18" /></div>
+    <div>
+      <strong>{{ resumen()?.por_categoria?.length ?? 0 }}</strong>
+      <span>Categorías</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILTROS ===== -->
+<div class="card filtros">
+  <input
+    type="text"
+    placeholder="Buscar producto..."
+    [ngModel]="texto()"
+    (ngModelChange)="texto.set($event)"
+    (keyup.enter)="cargar()"
+  />
+  <select [ngModel]="categoria()" (ngModelChange)="categoria.set($event); cargar()">
+    <option value="">Todas las categorías</option>
+    <option value="ALIMENTO">Alimento</option>
+    <option value="MEDICAMENTO">Medicamento</option>
+    <option value="VACUNA">Vacuna</option>
+    <option value="FERTILIZANTE">Fertilizante</option>
+    <option value="SEMILLA">Semilla</option>
+    <option value="HERRAMIENTA">Herramienta</option>
+  </select>
+  <button class="btn btn-fantasma" (click)="cargar()">Buscar</button>
+</div>
+
+<p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+<!-- ===== TABLA DE PRODUCTOS ===== -->
+<div class="card">
+  <p class="texto-suave pequeno" *ngIf="cargando()">Cargando inventario...</p>
+
+  <p class="texto-suave pequeno" *ngIf="!cargando() && productos().length === 0">
+    No hay productos que coincidan con la búsqueda.
+  </p>
+
+  <table class="tabla" *ngIf="!cargando() && productos().length > 0">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Stock actual</th>
+        <th>Stock mínimo</th>
+        <th>Estado</th>
+
+        <th style="text-align: right" *ngIf="puedeMover()">Movimientos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos()">
+        <td>
+          <strong>{{ producto.nombre }}</strong>
+
+          <span class="texto-suave pequeno" *ngIf="producto.fecha_vencimiento">
+            · vence {{ fecha(producto.fecha_vencimiento) }}</span
+          >
+        </td>
+        <td class="texto-suave">{{ textoCategoria(producto.categoria) }}</td>
+        <td>
+          <strong>{{ producto.stock_actual }}</strong>
+          <span class="texto-suave"> {{ producto.unidad }}</span>
+        </td>
+        <td class="texto-suave">{{ producto.stock_minimo }}</td>
+        <td>
+          <span class="badge" [class]="claseEstado(producto.estado)">{{ producto.estado }}</span>
+        </td>
+
+        <td *ngIf="puedeMover()">
+          <div class="acciones">
+            <button class="btn btn-fantasma btn-sm" (click)="registrar(producto, 'ENTRADA')">
+              Entrada
+            </button>
+            <button class="btn btn-fantasma btn-sm" (click)="registrar(producto, 'SALIDA')">
+              Salida
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== MODAL: NUEVO PRODUCTO ===== -->
+<ng-container *ngIf="modalProducto()">
+  <div class="capa" (click)="modalProducto.set(false)"></div>
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <h2>Nuevo producto</h2>
+      <button class="cerrar" (click)="modalProducto.set(false)">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Nombre del producto</label>
+      <input
+        type="text"
+        [ngModel]="nombre()"
+        (ngModelChange)="nombre.set($event)"
+        placeholder="Alimento balanceado"
+      />
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Categoría</label>
+        <select [ngModel]="catProducto()" (ngModelChange)="catProducto.set($event)">
+          <option value="ALIMENTO">Alimento</option>
+          <option value="MEDICAMENTO">Medicamento</option>
+          <option value="VACUNA">Vacuna</option>
+          <option value="FERTILIZANTE">Fertilizante</option>
+          <option value="SEMILLA">Semilla</option>
+          <option value="HERRAMIENTA">Herramienta</option>
+          <option value="OTRO">Otro</option>
+        </select>
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Unidad</label>
+        <input
+          type="text"
+          [ngModel]="unidad()"
+          (ngModelChange)="unidad.set($event)"
+          placeholder="kg, saco, L"
+        />
+      </div>
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Cantidad inicial</label>
+        <input
+          type="number"
+          [ngModel]="stockInicial()"
+          (ngModelChange)="stockInicial.set($event)"
+        />
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Stock mínimo</label>
+        <input type="number" [ngModel]="stockMinimo()" (ngModelChange)="stockMinimo.set($event)" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Fecha de vencimiento (opcional)</label>
+      <input
+        type="date"
+        [ngModel]="fechaVencimiento()"
+        (ngModelChange)="fechaVencimiento.set($event)"
+      />
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="modalProducto.set(false)">Cancelar</button>
+      <button class="btn btn-primario" (click)="guardarProducto()" [disabled]="guardando()">
+        Guardar
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<!-- ===== MODAL: MOVIMIENTO DE STOCK ===== -->
+<ng-container *ngIf="productoElegido() as producto">
+  <div class="capa" (click)="productoElegido.set(null)"></div>
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <h2>{{ tipoMovimiento() === 'ENTRADA' ? 'Registrar entrada' : 'Registrar salida' }}</h2>
+      <button class="cerrar" (click)="productoElegido.set(null)">✕</button>
+    </div>
+
+    <p class="texto-suave pequeno" style="margin-bottom: 14px">
+      {{ producto.nombre }} — stock actual:
+      <strong>{{ producto.stock_actual }} {{ producto.unidad }}</strong>
+    </p>
+
+    <p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+    <div class="campo">
+      <label>Cantidad</label>
+      <input
+        type="number"
+        [ngModel]="cantidadMovimiento()"
+        (ngModelChange)="cantidadMovimiento.set($event)"
+      />
+    </div>
+
+    <div class="campo">
+      <label>Motivo</label>
+      <input
+        type="text"
+        [ngModel]="motivoMovimiento()"
+        (ngModelChange)="motivoMovimiento.set($event)"
+        placeholder="Compra al proveedor / aplicado en potrero"
+      />
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="productoElegido.set(null)">Cancelar</button>
+      <button class="btn btn-primario" (click)="confirmarMovimiento()" [disabled]="guardando()">
+        Confirmar
+      </button>
+    </div>
+
+    <ng-container *ngIf="movimientos().length > 0">
+      <h3 class="sub">Últimos movimientos</h3>
+      <ul class="movimientos">
+        <li *ngFor="let mov of movimientos().slice(0, 5)">
+          <span class="badge" [class]="mov.tipo === 'ENTRADA' ? 'badge-exito' : 'badge-alerta'">
+            {{ mov.tipo }}
+          </span>
+          <span>{{ mov.cantidad }} {{ producto.unidad }}</span>
+          <span class="texto-suave">{{ mov.motivo }}</span>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</ng-container>

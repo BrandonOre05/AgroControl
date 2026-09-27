@@ -1,0 +1,198 @@
+/* ============================================================
+   pages/animales/detalle.css — Ficha del animal
+   ============================================================ */
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--texto-suave);
+  margin-bottom: 14px;
+}
+
+.volver:hover {
+  color: var(--primario);
+}
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- TARJETA SUPERIOR ---------- */
+.superior {
+  grid-template-columns: 1.3fr 1fr;
+  margin-bottom: 18px;
+}
+
+.ficha-animal {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.foto {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radio);
+  background: var(--primario-tenue);
+  color: var(--primario);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.datos-animal h2 {
+  font-size: 17px;
+}
+
+.datos-animal p {
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.peso {
+  font-size: 20px !important;
+  font-weight: 700;
+  color: var(--texto);
+  margin-top: 6px !important;
+}
+
+/* ---------- ANILLO DEL ÍNDICE ---------- */
+.indice-zona {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.anillo {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+/* El centro del anillo se dibuja ENCIMA de la grafica, asi que
+   su fondo tiene que ser opaco o se verian los colores de abajo. */
+.anillo-centro {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #fbfdfa;
+  display: grid;
+  place-items: center;
+}
+
+.anillo-centro strong {
+  font-size: 19px;
+}
+
+/* ---------- PESTAÑAS ---------- */
+.pestanas {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--borde);
+  margin-bottom: 18px;
+}
+
+.pestanas button {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  padding: 9px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.pestanas button:hover {
+  color: var(--texto-medio);
+}
+
+.pestanas button.activa {
+  color: var(--primario);
+  border-bottom-color: var(--primario);
+}
+
+.aviso {
+  background: var(--primario-tenue);
+  border: 1px solid rgba(63, 122, 82, 0.3);
+  color: var(--primario);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- DATOS GENERALES ---------- */
+.dos {
+  grid-template-columns: 1.3fr 1fr;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px 18px;
+}
+
+.datos dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--texto-tenue);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.datos dd {
+  font-size: 13px;
+  color: var(--texto);
+}
+
+/* ---------- PRÓXIMOS CONTROLES ---------- */
+.proximos {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.proximos li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.proximos strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.proximos .badge {
+  font-size: 9px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .superior,
+  .dos {
+    grid-template-columns: 1fr;
+  }
+}

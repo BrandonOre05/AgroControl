@@ -1,0 +1,154 @@
+/* ============================================================
+   pages/alertas/alertas.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- RESUMEN ---------- */
+.resumen {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 16px;
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.mini .punto {
+  width: 10px;
+  height: 10px;
+}
+
+.mini strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.mini span:last-child {
+  font-size: 11px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ---------- ALERTA ---------- */
+.alerta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 17px;
+}
+
+.alerta-icono {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.alerta-icono.peligro {
+  background: rgba(192, 80, 63, 0.14);
+  color: var(--peligro);
+}
+
+.alerta-icono.alerta {
+  background: rgba(201, 138, 18, 0.14);
+  color: var(--alerta);
+}
+
+.alerta-icono.info {
+  background: rgba(63, 127, 168, 0.14);
+  color: var(--info);
+}
+
+.alerta-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.alerta-texto h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.alerta-texto p {
+  font-size: 12.5px;
+  color: var(--texto-medio);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.alerta-acciones {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+/* ---------- ESTADOS VACÍOS / ERROR ---------- */
+.vacio {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.vacio-icono {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primario-tenue);
+  color: var(--primario);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+}
+
+.vacio h2 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.vacio p {
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+.error {
+  border-color: rgba(192, 80, 63, 0.4);
+  color: var(--peligro);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 800px) {
+  .resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .alerta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .alerta-acciones {
+    width: 100%;
+  }
+}

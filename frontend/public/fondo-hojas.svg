@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  fondo-hojas.svg
+  Fondo decorativo de follaje para AgroControl.
+
+  Es un SVG (imagen de texto), no un JPEG: pesa poco, no se
+  pixeliza en pantallas grandes y no hay que comprarlo.
+
+  Para cambiarlo por una foto real: pon la imagen en
+  "frontend/public" y cambia la variable de fondo
+  que esta en styles.css. No hay que tocar nada mas.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Degradado base: verdes muy claros, del color de la app -->
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e2eede" />
+      <stop offset="45%" stop-color="#d2e4cb" />
+      <stop offset="100%" stop-color="#ddebd8" />
+    </linearGradient>
+
+    <!-- Manchas de luz, como hojas desenfocadas al fondo -->
+    <radialGradient id="luz1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="luz2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9dc79a" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#9dc79a" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Hoja tipo almendra, con su nervadura -->
+    <g id="hoja">
+      <path d="M0 0 C 22 -32 74 -32 100 0 C 74 32 22 32 0 0 Z" />
+      <path d="M4 0 L 96 0" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="2" />
+    </g>
+
+    <!-- Desenfoque: convierte las hojas en manchas suaves -->
+    <filter id="borroso" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+    <filter id="suave" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="5" />
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#base)" />
+
+  <!-- Manchas grandes de luz y sombra -->
+  <g filter="url(#borroso)">
+    <ellipse cx="240" cy="150" rx="420" ry="300" fill="url(#luz1)" />
+    <ellipse cx="1320" cy="180" rx="380" ry="260" fill="url(#luz2)" />
+    <ellipse cx="820" cy="780" rx="520" ry="320" fill="url(#luz1)" />
+    <ellipse cx="1450" cy="720" rx="300" ry="240" fill="url(#luz2)" />
+  </g>
+
+  <!-- Hojas grandes, muy difuminadas: dan la textura de fondo -->
+  <g filter="url(#borroso)" opacity="0.5">
+    <use href="#hoja" transform="translate(90, 300) rotate(-24) scale(3.4)" fill="#8fbf8f" />
+    <use href="#hoja" transform="translate(560, 90) rotate(18) scale(2.8)" fill="#a4cba0" />
+    <use href="#hoja" transform="translate(980, 250) rotate(-38) scale(3.1)" fill="#87b98a" />
+    <use href="#hoja" transform="translate(1330, 430) rotate(12) scale(3.6)" fill="#9cc79a" />
+    <use href="#hoja" transform="translate(300, 690) rotate(30) scale(3.2)" fill="#8bb98d" />
+    <use href="#hoja" transform="translate(760, 640) rotate(-16) scale(2.9)" fill="#a8cda3" />
+    <use href="#hoja" transform="translate(1120, 800) rotate(-28) scale(3.3)" fill="#8fbf8f" />
+  </g>
+
+  <!-- Hojas medianas: dan profundidad sin distraer -->
+  <g filter="url(#suave)" opacity="0.38">
+    <use href="#hoja" transform="translate(180, 120) rotate(52) scale(1.5)" fill="#6fa877" />
+    <use href="#hoja" transform="translate(430, 420) rotate(-62) scale(1.7)" fill="#7fb47f" />
+    <use href="#hoja" transform="translate(700, 250) rotate(8) scale(1.4)" fill="#74ac7c" />
+    <use href="#hoja" transform="translate(900, 560) rotate(44) scale(1.8)" fill="#7fb47f" />
+    <use href="#hoja" transform="translate(1180, 180) rotate(-14) scale(1.5)" fill="#6fa877" />
+    <use href="#hoja" transform="translate(1400, 620) rotate(28) scale(1.7)" fill="#74ac7c" />
+    <use href="#hoja" transform="translate(620, 810) rotate(-46) scale(1.6)" fill="#6fa877" />
+    <use href="#hoja" transform="translate(100, 640) rotate(20) scale(1.3)" fill="#7fb47f" />
+  </g>
+
+  <!-- Hojas chicas: dan el detalle fino del follaje -->
+  <g filter="url(#suave)" opacity="0.22">
+    <use href="#hoja" transform="translate(260, 470) rotate(70) scale(0.8)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(540, 150) rotate(-70) scale(0.9)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(820, 380) rotate(24) scale(0.75)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(1060, 700) rotate(-52) scale(0.85)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(1280, 300) rotate(64) scale(0.7)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(1490, 460) rotate(-30) scale(0.8)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(400, 800) rotate(16) scale(0.72)" fill="#5f9a68" />
+    <use href="#hoja" transform="translate(700, 60) rotate(-40) scale(0.78)" fill="#5f9a68" />
+  </g>
+</svg>

@@ -1,0 +1,135 @@
+<header class="encabezado">
+  <div>
+    <h1>Mi perfil</h1>
+    <p class="texto-suave">Tus datos de acceso y tu información dentro del sistema.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="editar()" *ngIf="perfil() && !editando()">
+    <app-icono nombre="editar" [tamano]="14" />
+    Editar datos
+  </button>
+</header>
+
+<p class="aviso" *ngIf="exito()">{{ exito() }}</p>
+
+<p class="rojo" *ngIf="error()">{{ error() }}</p>
+
+<div class="rejilla dos" *ngIf="perfil() as u">
+  <!-- ============ TARJETA PRINCIPAL ============ -->
+  <div class="card">
+    <!-- Encabezado con avatar -->
+    <div class="cabecera">
+      <div class="avatar-grande">{{ u.nombre.charAt(0) }}</div>
+      <div>
+        <h2>{{ u.nombre }}</h2>
+        <p class="texto-suave">{{ u.correo }}</p>
+        <span class="badge" [class]="claseRol(u.rol)">{{ textoRol(u.rol) }}</span>
+      </div>
+    </div>
+
+    <!-- Modo lectura -->
+
+    <dl class="datos" *ngIf="!editando()">
+      <div>
+        <dt>Nombre completo</dt>
+        <dd>{{ u.nombre }}</dd>
+      </div>
+      <div>
+        <dt>Correo electrónico</dt>
+        <dd>{{ u.correo }}</dd>
+      </div>
+      <div>
+        <dt>Rol</dt>
+        <dd>{{ textoRol(u.rol) }}</dd>
+      </div>
+      <div>
+        <dt>Teléfono</dt>
+        <dd>{{ u.telefono ?? 'Sin registrar' }}</dd>
+      </div>
+      <div>
+        <dt>Estado de la cuenta</dt>
+        <dd>
+          <span class="badge badge-exito">{{ u.estado }}</span>
+        </dd>
+      </div>
+      <div>
+        <dt>Fecha de registro</dt>
+        <dd>{{ fecha(u.fecha_creacion) }}</dd>
+      </div>
+      <div>
+        <dt>Último acceso</dt>
+        <dd>{{ fecha(u.ultimo_login) }}</dd>
+      </div>
+    </dl>
+
+    <!-- Modo edición -->
+    <ng-container *ngIf="editando()">
+      <div class="campo">
+        <label>Nombre completo</label>
+        <input type="text" [ngModel]="nombre()" (ngModelChange)="nombre.set($event)" />
+      </div>
+
+      <div class="campo">
+        <label>Teléfono</label>
+        <input
+          type="text"
+          placeholder="Opcional"
+          [ngModel]="telefono()"
+          (ngModelChange)="telefono.set($event)"
+        />
+      </div>
+
+      <p class="texto-suave pequeno" style="margin-bottom: 14px">
+        El correo y el rol no se pueden cambiar aquí: el correo identifica tu cuenta y el rol solo
+        lo asigna el administrador.
+      </p>
+
+      <div class="fila">
+        <button class="btn btn-fantasma" (click)="cancelar()">Cancelar</button>
+        <button class="btn btn-primario" (click)="guardar()" [disabled]="cargando()">
+          {{ cargando() ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- ============ SEGURIDAD Y RESUMEN ============ -->
+  <div class="columna">
+    <div class="card">
+      <h2 class="card-titulo">Seguridad</h2>
+      <p class="texto-suave pequeno" style="margin-bottom: 14px">
+        Tu contraseña se guarda cifrada. Si crees que alguien la conoce, cámbiala.
+      </p>
+      <button class="btn btn-fantasma" (click)="modalPassword.set(true)">
+        <app-icono nombre="usuario" [tamano]="14" />
+        Cambiar contraseña
+      </button>
+    </div>
+
+    <div class="card">
+      <h2 class="card-titulo">Qué puedes hacer con tu rol</h2>
+      <ul class="permisos">
+        <li><i class="punto punto-exito"></i> Ver el panel de control y el estado de la finca</li>
+        <li><i class="punto punto-exito"></i> Consultar animales, cultivos y su historial</li>
+        <li><i class="punto punto-exito"></i> Registrar alimentación, pesajes y controles</li>
+        <ng-container *ngIf="u.rol !== 'TRABAJADOR'">
+          <li><i class="punto punto-exito"></i> Registrar vacunas, tratamientos e incidencias</li>
+          <li><i class="punto punto-exito"></i> Administrar inventario, cultivos y actividades</li>
+          <li><i class="punto punto-exito"></i> Consultar y descargar reportes</li>
+        </ng-container>
+
+        <li *ngIf="u.rol === 'ADMIN'">
+          <i class="punto punto-exito"></i> Administrar usuarios y sus roles
+        </li>
+      </ul>
+      <p class="texto-suave pequeno" style="margin-top: 12px">
+        Si necesitas más permisos, pídele a un administrador que ajuste tu rol.
+      </p>
+    </div>
+  </div>
+</div>
+
+<p class="texto-suave" *ngIf="!perfil()">Cargando tus datos...</p>
+
+<!-- Ventana compartida de cambio de contraseña -->
+<app-cambio-password [abierto]="modalPassword()" (cerrado)="modalPassword.set(false)" />

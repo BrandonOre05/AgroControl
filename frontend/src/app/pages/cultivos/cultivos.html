@@ -1,0 +1,177 @@
+<header class="encabezado">
+  <div>
+    <h1>Cultivos</h1>
+    <p class="texto-suave">Administra y controla los cultivos y sus etapas de producción.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="abrirFormulario()" *ngIf="puedeEditar()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Nuevo cultivo
+  </button>
+</header>
+
+<!-- ===== FILTROS POR ETAPA (pestañas) ===== -->
+<div class="pestanas">
+  <button [class.activa]="filtroEtapa() === ''" (click)="filtrar('')">Todos</button>
+  <button [class.activa]="filtroEtapa() === 'PREPARACION'" (click)="filtrar('PREPARACION')">
+    En preparación
+  </button>
+  <button [class.activa]="filtroEtapa() === 'SIEMBRA'" (click)="filtrar('SIEMBRA')">
+    En siembra
+  </button>
+  <button [class.activa]="filtroEtapa() === 'CRECIMIENTO'" (click)="filtrar('CRECIMIENTO')">
+    En crecimiento
+  </button>
+  <button [class.activa]="filtroEtapa() === 'MANTENIMIENTO'" (click)="filtrar('MANTENIMIENTO')">
+    En mantenimiento
+  </button>
+  <button [class.activa]="filtroEtapa() === 'COSECHA'" (click)="filtrar('COSECHA')">
+    En cosecha
+  </button>
+  <button [class.activa]="filtroEtapa() === 'FINALIZADA'" (click)="filtrar('FINALIZADA')">
+    Finalizados
+  </button>
+</div>
+
+<p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+<!-- ===== REJILLA DE TARJETAS ===== -->
+
+<p class="texto-suave" *ngIf="cargando()">Cargando cultivos...</p>
+
+<div class="card vacio" *ngIf="!cargando() && cultivos().length === 0">
+  <p>No hay cultivos en esta categoría.</p>
+</div>
+
+<div class="rejilla tarjetas" *ngIf="!cargando() && cultivos().length > 0">
+  <article
+    class="card cultivo"
+    [class.inactivo]="cultivo.estado !== 'ACTIVO'"
+    *ngFor="let cultivo of cultivos()"
+  >
+    <!-- "Foto": mientras no haya imágenes, un bloque con color según etapa -->
+    <div class="foto" [class]="colorFoto(cultivo.etapa)">
+      <app-icono nombre="cultivos" [tamano]="28" />
+      <span class="estado-mini">{{ cultivo.estado }}</span>
+    </div>
+
+    <!-- Nombre y tipo -->
+    <h2>{{ cultivo.nombre }}</h2>
+    <p class="tipo">{{ cultivo.tipo ?? 'Sin tipo' }}</p>
+
+    <!-- Datos -->
+    <div class="datos">
+      <span>{{ numero(cultivo.area) }} ha</span>
+
+      <span class="texto-suave" *ngIf="cultivo.ubicacion">{{ cultivo.ubicacion }}</span>
+    </div>
+
+    <!-- Etapa y avance -->
+    <div class="fila-entre">
+      <span class="badge" [class]="claseEtapa(cultivo.etapa)">
+        {{ textoEtapa(cultivo.etapa) }}
+      </span>
+
+      <span class="cosecha" *ngIf="diasParaCosecha(cultivo) > 0 && cultivo.etapa !== 'FINALIZADA'"
+        >{{ diasParaCosecha(cultivo) }} d</span
+      >
+    </div>
+
+    <div class="pista">
+      <div class="avance" [style.width.%]="progreso(cultivo.etapa)"></div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="acciones">
+      <button
+        class="btn btn-fantasma btn-sm"
+        (click)="avanzar(cultivo)"
+        *ngIf="puedeEditar() && cultivo.estado === 'ACTIVO' && cultivo.etapa !== 'FINALIZADA'"
+      >
+        Avanzar etapa
+      </button>
+
+      <button
+        class="btn btn-peligro btn-sm"
+        (click)="cancelar(cultivo)"
+        *ngIf="puedeEditar() && cultivo.estado === 'ACTIVO'"
+      >
+        Cancelar
+      </button>
+    </div>
+  </article>
+</div>
+
+<!-- ===== FORMULARIO (modal) ===== -->
+<ng-container *ngIf="modalAbierto()">
+  <div class="capa" (click)="cerrarFormulario()"></div>
+
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <h2>Nuevo cultivo</h2>
+      <button class="cerrar" (click)="cerrarFormulario()">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Nombre del cultivo</label>
+      <input
+        type="text"
+        placeholder="Maíz, Tomate, Trigo..."
+        [ngModel]="nombre()"
+        (ngModelChange)="nombre.set($event)"
+      />
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Tipo / variedad</label>
+        <input
+          type="text"
+          placeholder="Maíz dulce"
+          [ngModel]="tipo()"
+          (ngModelChange)="tipo.set($event)"
+        />
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Área (hectáreas)</label>
+        <input
+          type="number"
+          step="0.1"
+          placeholder="1.2"
+          [ngModel]="area()"
+          (ngModelChange)="area.set($event)"
+        />
+      </div>
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Fecha de siembra</label>
+        <input type="date" [ngModel]="fechaSiembra()" (ngModelChange)="fechaSiembra.set($event)" />
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Cosecha estimada</label>
+        <input type="date" [ngModel]="fechaCosecha()" (ngModelChange)="fechaCosecha.set($event)" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Ubicación en la finca</label>
+      <input
+        type="text"
+        placeholder="Lote Norte"
+        [ngModel]="ubicacion()"
+        (ngModelChange)="ubicacion.set($event)"
+      />
+    </div>
+
+    <p class="error-general" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="cerrarFormulario()">Cancelar</button>
+      <button class="btn btn-primario" (click)="guardar()" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Crear cultivo' }}
+      </button>
+    </div>
+  </div>
+</ng-container>

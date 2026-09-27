@@ -1,0 +1,93 @@
+<header class="encabezado">
+  <div>
+    <h1>Animales</h1>
+    <p class="texto-suave">Listado y estado de los animales de la finca.</p>
+  </div>
+
+  <button class="btn btn-primario" *ngIf="puedeCrear()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Registrar animal
+  </button>
+</header>
+
+<!-- ===== FILTROS ===== -->
+<div class="card filtros">
+  <input
+    type="text"
+    placeholder="Buscar por código, nombre o raza..."
+    [ngModel]="texto()"
+    (ngModelChange)="texto.set($event)"
+    (keyup.enter)="cargar()"
+  />
+
+  <select [ngModel]="estadoIndice()" (ngModelChange)="estadoIndice.set($event); cargar()">
+    <option value="">Todo el estado</option>
+    <option value="OPTIMO">Óptimo</option>
+    <option value="OBSERVACION">Requiere observación</option>
+    <option value="ATENCION">Requiere atención</option>
+  </select>
+
+  <button class="btn btn-fantasma" (click)="cargar()">Buscar</button>
+  <button class="btn btn-fantasma" (click)="limpiarFiltros()">Limpiar</button>
+</div>
+
+<!-- ===== TARJETA CON LA TABLA ===== -->
+<div class="card">
+  <p class="texto-suave pequeno" *ngIf="cargando()">Cargando animales...</p>
+
+  <p class="error-texto" *ngIf="!cargando() && error()">{{ error() }}</p>
+
+  <div class="vacio" *ngIf="!cargando() && !error() && animales().length === 0">
+    <p>No hay animales que coincidan con la búsqueda.</p>
+    <button class="btn btn-fantasma btn-sm" (click)="limpiarFiltros()">Ver todos</button>
+  </div>
+
+  <table class="tabla" *ngIf="!cargando() && !error() && animales().length > 0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Especie / Raza</th>
+        <th>Sexo</th>
+        <th>Peso</th>
+        <th>Índice</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let animal of animales()">
+        <td class="fuente-codigo">{{ animal.codigo }}</td>
+        <td>{{ animal.nombre ?? '-' }}</td>
+        <td>
+          {{ animal.especie }}
+
+          <span class="texto-suave" *ngIf="animal.raza">· {{ animal.raza }}</span>
+        </td>
+        <td>{{ animal.sexo === 'HEMBRA' ? 'Hembra' : 'Macho' }}</td>
+        <td>{{ animal.ultimo_peso ? animal.ultimo_peso + ' kg' : '-' }}</td>
+        <td>
+          <span class="badge" [class]="claseIndice(animal.estado_indice)">
+            {{
+              animal.estado_indice === 'OPTIMO'
+                ? 'Óptimo'
+                : animal.estado_indice === 'OBSERVACION'
+                  ? 'Observación'
+                  : 'Atención'
+            }}
+          </span>
+        </td>
+        <td>
+          <span class="badge" [class]="claseEstado(animal.estado_animal)">
+            {{ animal.estado_animal }}
+          </span>
+        </td>
+        <td>
+          <a class="btn btn-fantasma btn-sm" [routerLink]="['/animales', animal.id_animal]">
+            Ver ficha
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

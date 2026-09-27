@@ -1,0 +1,139 @@
+/* ============================================================
+   pages/actividades/actividades.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- PESTAÑAS ---------- */
+.pestanas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pestanas button {
+  background: var(--card-2);
+  border: 1px solid var(--borde-suave);
+  color: var(--texto-suave);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pestanas button.activa {
+  background: var(--primario-tenue);
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+.cuenta {
+  background: var(--sombra-suave);
+  border-radius: 999px;
+  padding: 1px 6px;
+  font-size: 10px;
+}
+
+/* ---------- TABLA ---------- */
+.tarea-nombre {
+  display: block;
+  font-size: 13px;
+  color: var(--texto);
+}
+
+.bloque {
+  display: block;
+  margin-top: 2px;
+}
+
+.acciones {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ---------- MENSAJES ---------- */
+.aviso {
+  background: var(--primario-tenue);
+  border: 1px solid rgba(63, 122, 82, 0.3);
+  color: var(--primario);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- MODAL ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100% - 32px));
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 24px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 18px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.cerrar {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}

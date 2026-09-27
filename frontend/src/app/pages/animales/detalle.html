@@ -1,0 +1,397 @@
+<p class="texto-suave" *ngIf="cargando()">Cargando ficha del animal...</p>
+
+<div class="card error" *ngIf="!cargando() && error()">{{ error() }}</div>
+<ng-container *ngIf="!cargando() && !error() && animal() as a">
+  <!-- Volver al listado -->
+  <a class="volver" [routerLink]="['/animales']">
+    <app-icono nombre="volver" [tamano]="14" />
+    Volver a animales
+  </a>
+
+  <!-- ===== ENCABEZADO DE LA FICHA ===== -->
+  <header class="encabezado">
+    <div>
+      <div class="fila">
+        <h1>{{ a.nombre ?? a.codigo }}</h1>
+        <span class="badge badge-exito">{{ a.estado_animal }}</span>
+      </div>
+      <p class="texto-suave">
+        {{ a.especie }}
+        <span *ngIf="a.raza"> · {{ a.raza }} </span>
+        · Ingresó el
+        {{ formatearFecha(a.fecha_ingreso) }}
+      </p>
+    </div>
+
+    <div class="fila">
+      <button class="btn btn-fantasma" *ngIf="puedeEditar()">
+        <app-icono nombre="editar" [tamano]="14" />
+        Editar
+      </button>
+
+      <button class="btn btn-primario" (click)="cambiarPestana('registros')">
+        <app-icono nombre="mas" [tamano]="14" />
+        Registrar
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== TARJETA PRINCIPAL: foto + índice ===== -->
+  <div class="rejilla superior">
+    <div class="card ficha-animal">
+      <!-- Foto: aún no hay imágenes en la base de datos,
+           por eso se muestra un avatar con la especie -->
+      <div class="foto con-fondo con-fondo-fuerte">
+        <app-icono nombre="animales" [tamano]="42" />
+      </div>
+
+      <div class="datos-animal">
+        <h2>{{ a.nombre ?? a.codigo }}</h2>
+        <p class="texto-suave">
+          {{ a.sexo === 'HEMBRA' ? '♀ Hembra' : '♂ Macho' }} · {{ edad(a.fecha_nacimiento) }}
+        </p>
+
+        <p class="peso" *ngIf="a.ultimo_peso">{{ a.ultimo_peso }} kg</p>
+
+        <p class="texto-suave pequeno" *ngIf="a.ubicacion_finca">
+          Ubicación: {{ a.ubicacion_finca }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Índice de Estado (círculo con porcentaje) -->
+    <div class="card indice-card">
+      <h2 class="card-titulo">Índice de estado</h2>
+
+      <div class="indice-zona">
+        <div
+          class="anillo"
+          [style.background]="
+            'conic-gradient(' +
+            (a.estado_indice === 'ATENCION'
+              ? 'var(--peligro)'
+              : a.estado_indice === 'OBSERVACION'
+                ? 'var(--alerta)'
+                : 'var(--exito)') +
+            ' 0 ' +
+            porcentajeIndice(a.estado_indice) +
+            '%, ' +
+            'var(--borde-suave) ' +
+            porcentajeIndice(a.estado_indice) +
+            '% 100%)'
+          "
+        >
+          <div class="anillo-centro">
+            <strong>{{ porcentajeIndice(a.estado_indice) }}%</strong>
+          </div>
+        </div>
+
+        <div>
+          <span class="badge" [class]="claseIndice(a.estado_indice)">
+            {{ textoIndice(a.estado_indice) }}
+          </span>
+          <p class="texto-suave pequeno" style="margin-top: 8px">
+            Índice administrativo de seguimiento. No es un diagnóstico veterinario.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PESTAÑAS ===== -->
+  <div class="pestanas">
+    <button [class.activa]="pestana() === 'informacion'" (click)="cambiarPestana('informacion')">
+      Información
+    </button>
+    <button [class.activa]="pestana() === 'historial'" (click)="cambiarPestana('historial')">
+      Historial
+    </button>
+    <button [class.activa]="pestana() === 'registros'" (click)="cambiarPestana('registros')">
+      Vacunas y pesajes
+    </button>
+    <button [class.activa]="pestana() === 'alimentacion'" (click)="cambiarPestana('alimentacion')">
+      Alimentación
+    </button>
+  </div>
+
+  <p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+  <!-- ===== CONTENIDO SEGÚN PESTAÑA ===== -->
+  <ng-container [ngSwitch]="pestana()">
+    <ng-container *ngSwitchCase="'informacion'">
+      <div class="rejilla dos">
+        <div class="card">
+          <h2 class="card-titulo">Información general</h2>
+          <dl class="datos">
+            <div>
+              <dt>Código</dt>
+              <dd>{{ a.codigo }}</dd>
+            </div>
+            <div>
+              <dt>Especie</dt>
+              <dd>{{ a.especie }}</dd>
+            </div>
+            <div>
+              <dt>Raza</dt>
+              <dd>{{ a.raza ?? '-' }}</dd>
+            </div>
+            <div>
+              <dt>Sexo</dt>
+              <dd>{{ a.sexo === 'HEMBRA' ? 'Hembra' : 'Macho' }}</dd>
+            </div>
+            <div>
+              <dt>Nacimiento</dt>
+              <dd>{{ formatearFecha(a.fecha_nacimiento) }}</dd>
+            </div>
+            <div>
+              <dt>Ingreso</dt>
+              <dd>{{ formatearFecha(a.fecha_ingreso) }}</dd>
+            </div>
+            <div>
+              <dt>Ubicación</dt>
+              <dd>{{ a.ubicacion_finca ?? '-' }}</dd>
+            </div>
+            <div>
+              <dt>Estado</dt>
+              <dd>{{ a.estado_animal }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h2 class="card-titulo">Próximos controles</h2>
+
+          <p class="texto-suave pequeno" *ngIf="proximos().length === 0">
+            No hay eventos programados.
+          </p>
+
+          <ul class="proximos" *ngIf="proximos().length > 0">
+            <li *ngFor="let evento of proximos()">
+              <span
+                class="badge"
+                [class]="evento.dias_restantes <= 7 ? 'badge-alerta' : 'badge-info'"
+              >
+                {{ evento.tipo }}
+              </span>
+              <div>
+                <strong>{{ evento.titulo }}</strong>
+                <p class="texto-suave pequeno">
+                  {{ formatearFecha(evento.fecha) }} · en {{ evento.dias_restantes }} día(s)
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'historial'">
+      <div class="card">
+        <h2 class="card-titulo">Historial del animal</h2>
+
+        <p class="texto-suave pequeno" *ngIf="historial().length === 0">
+          Todavía no hay eventos registrados.
+        </p>
+
+        <table class="tabla" *ngIf="historial().length > 0">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Evento</th>
+              <th>Detalle</th>
+              <th>Responsable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let evento of historial()">
+              <td>
+                {{ formatearFecha(evento.fecha_evento) }}
+                <span class="pequeno texto-suave">{{ evento.fecha_evento | tiempoRelativo }}</span>
+              </td>
+              <td>
+                <span class="badge badge-neutro">{{ evento.tipo_evento }}</span>
+              </td>
+              <td>{{ evento.titulo }}</td>
+              <td class="texto-suave">{{ evento.detalle ?? '-' }}</td>
+              <td class="texto-suave">{{ evento.responsable ?? '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'registros'">
+      <div class="rejilla dos">
+        <!-- Registrar vacuna -->
+        <div class="card">
+          <h2 class="card-titulo">Registrar vacuna</h2>
+          <ng-container *ngIf="puedeVacunar()">
+            <div class="campo">
+              <label>Nombre de la vacuna</label>
+              <input
+                type="text"
+                placeholder="Aftosa, Brucelosis..."
+                [ngModel]="nombreVacuna()"
+                (ngModelChange)="nombreVacuna.set($event)"
+              />
+            </div>
+            <div class="campo">
+              <label>Próxima fecha</label>
+              <input
+                type="date"
+                [ngModel]="proximaVacuna()"
+                (ngModelChange)="proximaVacuna.set($event)"
+              />
+            </div>
+            <button class="btn btn-primario" (click)="registrarVacuna()" [disabled]="guardando()">
+              Guardar vacuna
+            </button>
+          </ng-container>
+          <p class="texto-suave pequeno" *ngIf="!puedeVacunar()">
+            Tu rol no puede registrar vacunas. Puede hacerlo el encargado o el administrador.
+          </p>
+        </div>
+
+        <!-- Registrar pesaje -->
+        <div class="card">
+          <h2 class="card-titulo">Registrar pesaje</h2>
+          <ng-container *ngIf="puedePesar()">
+            <div class="campo">
+              <label>Peso (kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                placeholder="425.5"
+                [ngModel]="peso()"
+                (ngModelChange)="peso.set($event)"
+              />
+            </div>
+            <button
+              class="btn btn-primario"
+              (click)="registrarPesaje()"
+              [disabled]="guardando() || !peso()"
+            >
+              Guardar pesaje
+            </button>
+          </ng-container>
+          <p class="texto-suave pequeno" *ngIf="!puedePesar()">
+            Tu rol no puede registrar pesajes.
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'alimentacion'">
+      <div class="rejilla dos">
+        <!-- Registrar alimentación -->
+        <div class="card">
+          <h2 class="card-titulo">Registrar alimentación</h2>
+
+          <ng-container *ngIf="puedeAlimentar()">
+            <p class="texto-suave pequeno" *ngIf="productos().length === 0">
+              No hay productos de alimento en el inventario. Pide al encargado que registre uno en
+              el módulo de Inventario.
+            </p>
+            <ng-container *ngIf="productos().length > 0">
+              <div class="campo">
+                <label>Alimento (del inventario)</label>
+                <select [ngModel]="productoElegido()" (ngModelChange)="productoElegido.set($event)">
+                  <option [ngValue]="null">Selecciona el alimento...</option>
+
+                  <option [ngValue]="producto" *ngFor="let producto of productos()">
+                    {{ producto.nombre }} ({{ producto.stock_actual }} {{ producto.unidad }})
+                  </option>
+                </select>
+              </div>
+
+              <div class="fila">
+                <div class="campo" style="flex: 1">
+                  <label>Cantidad</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    [ngModel]="cantidadAlimento()"
+                    (ngModelChange)="cantidadAlimento.set($event)"
+                  />
+                </div>
+                <div class="campo" style="flex: 1">
+                  <label>Fecha</label>
+                  <input
+                    type="date"
+                    [ngModel]="fechaAlimento()"
+                    (ngModelChange)="fechaAlimento.set($event)"
+                  />
+                </div>
+                <div class="campo" style="flex: 1">
+                  <label>Hora</label>
+                  <input
+                    type="time"
+                    [ngModel]="horaAlimento()"
+                    (ngModelChange)="horaAlimento.set($event)"
+                  />
+                </div>
+              </div>
+
+              <p class="texto-suave pequeno" style="margin-bottom: 14px">
+                Al guardar, el sistema descuenta esta cantidad del inventario automáticamente.
+              </p>
+
+              <button
+                class="btn btn-primario"
+                (click)="registrarAlimento()"
+                [disabled]="guardando() || !productoElegido() || !cantidadAlimento()"
+              >
+                {{ guardando() ? 'Guardando...' : 'Registrar alimentación' }}
+              </button>
+            </ng-container>
+          </ng-container>
+          <p class="texto-suave pequeno" *ngIf="!puedeAlimentar()">
+            Tu rol no puede registrar alimentación.
+          </p>
+        </div>
+
+        <!-- Productos de alimento y su stock -->
+        <div class="card">
+          <h2 class="card-titulo">Alimentos en inventario</h2>
+
+          <p class="texto-suave pequeno" *ngIf="productos().length === 0">
+            Sin productos de alimento registrados.
+          </p>
+
+          <table class="tabla" *ngIf="productos().length > 0">
+            <thead>
+              <tr>
+                <th>Alimento</th>
+                <th>Stock</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let producto of productos()">
+                <td>{{ producto.nombre }}</td>
+                <td>
+                  <strong>{{ producto.stock_actual }}</strong> {{ producto.unidad }}
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [class]="
+                      producto.estado === 'DISPONIBLE'
+                        ? 'badge-exito'
+                        : producto.estado === 'BAJO'
+                          ? 'badge-alerta'
+                          : 'badge-peligro'
+                    "
+                  >
+                    {{ producto.estado }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

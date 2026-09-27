@@ -1,0 +1,151 @@
+<header class="encabezado">
+  <div>
+    <h1>Actividades</h1>
+    <p class="texto-suave">Tareas y actividades del personal en la finca.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="modalAbierto.set(true)" *ngIf="puedeCrear()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Nueva actividad
+  </button>
+</header>
+
+<!-- ===== PESTAÑAS POR ESTADO ===== -->
+<div class="pestanas">
+  <button [class.activa]="filtro() === ''" (click)="filtrar('')">Todas</button>
+  <button [class.activa]="filtro() === 'PENDIENTE'" (click)="filtrar('PENDIENTE')">
+    Pendientes <span class="cuenta">{{ contadores()['PENDIENTE'] ?? 0 }}</span>
+  </button>
+  <button [class.activa]="filtro() === 'EN_PROCESO'" (click)="filtrar('EN_PROCESO')">
+    En proceso <span class="cuenta">{{ contadores()['EN_PROCESO'] ?? 0 }}</span>
+  </button>
+  <button [class.activa]="filtro() === 'COMPLETADA'" (click)="filtrar('COMPLETADA')">
+    Completadas
+  </button>
+  <button [class.activa]="filtro() === 'CANCELADA'" (click)="filtrar('CANCELADA')">
+    Canceladas
+  </button>
+</div>
+
+<p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+<p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+<!-- ===== TABLA DE TAREAS ===== -->
+<div class="card">
+  <p class="texto-suave pequeno" *ngIf="cargando()">Cargando actividades...</p>
+
+  <p class="texto-suave pequeno" *ngIf="!cargando() && tareas().length === 0">
+    No hay actividades en esta categoría.
+  </p>
+
+  <table class="tabla" *ngIf="!cargando() && tareas().length > 0">
+    <thead>
+      <tr>
+        <th>Tarea</th>
+        <th>Tipo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+
+        <th style="text-align: right" *ngIf="puedeAvanzar()">Cambiar estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tarea of tareas()">
+        <td>
+          <strong class="tarea-nombre">{{ tarea.nombre }}</strong>
+
+          <span class="texto-suave pequeno bloque" *ngIf="tarea.descripcion">{{
+            tarea.descripcion
+          }}</span>
+        </td>
+        <td class="texto-suave">{{ textoTipo(tarea.tipo) }}</td>
+        <td class="texto-suave">{{ formatearFecha(tarea.fecha) }}</td>
+        <td>
+          <span class="badge" [class]="claseEstado(tarea.estado)">{{
+            textoTipo(tarea.estado)
+          }}</span>
+        </td>
+
+        <td *ngIf="puedeAvanzar()">
+          <div class="acciones">
+            <button
+              class="btn btn-fantasma btn-sm"
+              (click)="cambiarEstado(tarea, 'EN_PROCESO')"
+              *ngIf="tarea.estado === 'PENDIENTE'"
+            >
+              Iniciar
+            </button>
+
+            <button
+              class="btn btn-primario btn-sm"
+              (click)="cambiarEstado(tarea, 'COMPLETADA')"
+              *ngIf="tarea.estado === 'EN_PROCESO'"
+            >
+              Completar
+            </button>
+
+            <button
+              class="btn btn-peligro btn-sm"
+              (click)="cambiarEstado(tarea, 'CANCELADA')"
+              *ngIf="tarea.estado !== 'CANCELADA' && tarea.estado !== 'COMPLETADA'"
+            >
+              Cancelar
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== MODAL: NUEVA ACTIVIDAD ===== -->
+<ng-container *ngIf="modalAbierto()">
+  <div class="capa" (click)="modalAbierto.set(false)"></div>
+
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <h2>Nueva actividad</h2>
+      <button class="cerrar" (click)="modalAbierto.set(false)">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Nombre de la tarea</label>
+      <input
+        type="text"
+        placeholder="Revisar bebederos del potrero 1"
+        [ngModel]="nombre()"
+        (ngModelChange)="nombre.set($event)"
+      />
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Tipo</label>
+        <select [ngModel]="tipo()" (ngModelChange)="tipo.set($event)">
+          <option value="GANADERA">Ganadera</option>
+          <option value="AGRICOLA">Agrícola</option>
+          <option value="MANTENIMIENTO">Mantenimiento</option>
+          <option value="ADMINISTRATIVA">Administrativa</option>
+          <option value="OTRA">Otra</option>
+        </select>
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Fecha</label>
+        <input type="date" [ngModel]="fecha()" (ngModelChange)="fecha.set($event)" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Hora (opcional)</label>
+      <input type="time" [ngModel]="hora()" (ngModelChange)="hora.set($event)" />
+    </div>
+
+    <p class="error-general" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="modalAbierto.set(false)">Cancelar</button>
+      <button class="btn btn-primario" (click)="guardar()" [disabled]="guardando()">Guardar</button>
+    </div>
+  </div>
+</ng-container>

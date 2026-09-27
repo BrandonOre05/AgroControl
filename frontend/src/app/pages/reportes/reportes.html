@@ -1,0 +1,86 @@
+<header class="encabezado">
+  <div>
+    <h1>Reportes</h1>
+    <p class="texto-suave">Genera y descarga reportes de tu finca.</p>
+  </div>
+</header>
+
+<p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+<!-- ===== TARJETAS DE REPORTES ===== -->
+<div class="rejilla tarjetas">
+  <article class="card reporte" *ngFor="let reporte of reportes()">
+    <div class="reporte-icono">
+      <app-icono [nombre]="reporte.icono" [tamano]="20" />
+    </div>
+
+    <h2>{{ reporte.titulo }}</h2>
+    <p class="texto-suave pequeno">Datos consolidados de la finca, listos para descargar.</p>
+
+    <div class="reporte-acciones">
+      <button
+        class="btn btn-fantasma btn-sm"
+        (click)="ver(reporte.tipo)"
+        [disabled]="cargandoReporte()"
+      >
+        Ver
+      </button>
+
+      <ng-container *ngIf="puedeExportar()">
+        <button class="btn btn-primario btn-sm" (click)="descargar(reporte.tipo)">
+          <app-icono nombre="descargar" [tamano]="13" />
+          CSV
+        </button>
+        <button
+          class="btn btn-fantasma btn-sm"
+          (click)="imprimir(reporte.tipo)"
+          title="Guardar como PDF"
+        >
+          <app-icono nombre="reportes" [tamano]="13" />
+          PDF
+        </button>
+      </ng-container>
+    </div>
+  </article>
+</div>
+
+<!-- ===== VISTA PREVIA DEL REPORTE ===== -->
+<ng-container *ngIf="abierto() as reporte">
+  <div class="capa" (click)="abierto.set(null)"></div>
+
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <div>
+        <h2>{{ reporte.titulo }}</h2>
+        <p class="texto-suave pequeno">
+          {{ reporte.filas.length }} registro(s) · generado el
+          {{ reporte.generado_en | date: 'dd/MM/yyyy' }}
+        </p>
+      </div>
+      <button class="cerrar" (click)="abierto.set(null)">✕</button>
+    </div>
+
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th *ngFor="let columna of reporte.columnas">{{ columna }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fila of reporte.filas">
+            <td *ngFor="let columna of reporte.columnas">{{ fila[columna] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="descargar(reporte.tipo)" *ngIf="puedeExportar()">
+        Descargar CSV
+      </button>
+
+      <button class="btn btn-primario" (click)="abierto.set(null)">Cerrar</button>
+    </div>
+  </div>
+</ng-container>

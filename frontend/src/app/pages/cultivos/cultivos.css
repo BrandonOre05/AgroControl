@@ -1,0 +1,259 @@
+/* ============================================================
+   pages/cultivos/cultivos.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- PESTAÑAS DE FILTRO ---------- */
+.pestanas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.pestanas button {
+  background: var(--card-2);
+  border: 1px solid var(--borde-suave);
+  color: var(--texto-suave);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.pestanas button:hover {
+  border-color: var(--primario);
+  color: var(--texto-medio);
+}
+
+.pestanas button.activa {
+  background: var(--primario-tenue);
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+/* ---------- REJILLA DE TARJETAS ---------- */
+.tarjetas {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cultivo {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cultivo.inactivo {
+  opacity: 0.6;
+}
+
+/* Bloque que hace de "foto" del cultivo.
+   Es el follaje del fondo con un tinte de color segun la etapa:
+   asi se ve la imagen de fondo y ademas se distingue la etapa. */
+.foto {
+  height: 88px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  color: rgba(255, 255, 255, 0.92);
+  background-image: var(--fondo-imagen);
+  background-size: cover;
+  background-position: center;
+}
+
+/* El tinte va en background-color para NO tapar la imagen de fondo */
+.foto.verde {
+  background-color: rgba(63, 122, 82, 0.62);
+}
+
+.foto.azul {
+  background-color: rgba(55, 115, 156, 0.58);
+}
+
+.foto.ambar {
+  background-color: rgba(168, 132, 47, 0.55);
+}
+
+.foto.gris {
+  background-color: rgba(79, 96, 85, 0.55);
+}
+
+.estado-mini {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--sombra);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.cultivo h2 {
+  font-size: 15px;
+  margin: 13px 14px 0;
+}
+
+.tipo {
+  font-size: 12px;
+  color: var(--texto-suave);
+  margin: 2px 14px 10px;
+}
+
+.datos {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 10px;
+  font-size: 12px;
+  color: var(--texto-medio);
+}
+
+.datos .texto-suave {
+  font-size: 11px;
+}
+
+/* Barra de progreso */
+.pista {
+  height: 5px;
+  background: var(--fondo-2);
+  margin: 0 14px 12px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.avance {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primario-fuerte), var(--primario));
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.cultivo .fila-entre {
+  padding: 0 14px 10px;
+}
+
+.cultivo .badge {
+  font-size: 9px;
+}
+
+.cosecha {
+  font-size: 11px;
+  color: var(--texto-tenue);
+}
+
+/* Acciones al pie de la tarjeta */
+.acciones {
+  display: flex;
+  gap: 7px;
+  padding: 11px 14px;
+  border-top: 1px solid var(--borde-suave);
+  margin-top: auto;
+}
+
+.acciones .btn {
+  flex: 1;
+}
+
+/* ---------- VACÍO ---------- */
+.vacio {
+  text-align: center;
+  padding: 40px;
+  color: var(--texto-suave);
+}
+
+/* ---------- MODAL ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100% - 32px));
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 24px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 18px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.cerrar {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.cerrar:hover {
+  background: var(--card-2);
+  color: var(--texto);
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1000px) {
+  .tarjetas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .tarjetas {
+    grid-template-columns: 1fr;
+  }
+}

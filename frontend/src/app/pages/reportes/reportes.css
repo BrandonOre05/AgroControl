@@ -1,0 +1,140 @@
+/* ============================================================
+   pages/reportes/reportes.css
+   ============================================================ */
+
+.encabezado {
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- TARJETAS ---------- */
+.tarjetas {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reporte {
+  display: flex;
+  flex-direction: column;
+}
+
+.reporte-icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--primario-tenue);
+  color: var(--primario);
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+
+.reporte h2 {
+  font-size: 15px;
+}
+
+.reporte p {
+  margin: 4px 0 14px;
+  flex: 1;
+}
+
+.reporte-acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.reporte-acciones .btn {
+  flex: 1;
+}
+
+/* ---------- MODAL CON TABLA ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(860px, calc(100% - 32px));
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 22px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 14px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.cerrar {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.tabla-scroll {
+  overflow: auto;
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio-sm);
+  flex: 1;
+}
+
+.tabla-scroll .tabla th {
+  position: sticky;
+  top: 0;
+  background: var(--card-2);
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+@media (max-width: 1000px) {
+  .tarjetas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .tarjetas {
+    grid-template-columns: 1fr;
+  }
+}

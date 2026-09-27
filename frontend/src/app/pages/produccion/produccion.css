@@ -1,0 +1,247 @@
+/* ============================================================
+   pages/produccion/produccion.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- KPIS ---------- */
+.kpis {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 16px;
+}
+
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.kpi .icono {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.kpi .icono.verde {
+  background: var(--primario-tenue);
+  color: var(--primario);
+}
+
+.kpi .icono.azul {
+  background: rgba(63, 127, 168, 0.14);
+  color: var(--info);
+}
+
+.kpi .icono.ambar {
+  background: rgba(201, 138, 18, 0.14);
+  color: var(--alerta);
+}
+
+.kpi strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.kpi span {
+  font-size: 11px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ---------- PESTAÑAS DE PERIODO ---------- */
+.pestanas {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.pestanas button {
+  background: var(--card-2);
+  border: 1px solid var(--borde-suave);
+  color: var(--texto-suave);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pestanas button.activa {
+  background: var(--primario-tenue);
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+/* ---------- CONTENIDO ---------- */
+.dos {
+  grid-template-columns: 1.4fr 1fr;
+}
+
+/* ---------- GRÁFICA DE BARRAS (CSS puro) ---------- */
+.grafica {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 190px;
+  padding-top: 20px;
+}
+
+.barra {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.barra-valor {
+  width: 100%;
+  max-width: 34px;
+  background: linear-gradient(180deg, var(--primario) 0%, var(--primario-fuerte) 100%);
+  border-radius: 5px 5px 0 0;
+  position: relative;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.barra-cantidad {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--texto-suave);
+}
+
+.barra-dia {
+  font-size: 9px;
+  color: var(--texto-tenue);
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+/* ---------- RANKING ---------- */
+.ranking {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ranking li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13px;
+}
+
+.medalla {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primario-tenue);
+  color: var(--primario);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ranking strong {
+  display: block;
+  font-size: 13px;
+}
+
+.cantidad {
+  margin-left: auto;
+  color: var(--texto);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.aviso {
+  background: var(--primario-tenue);
+  border: 1px solid rgba(63, 122, 82, 0.3);
+  color: var(--primario);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- MODAL ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100% - 32px));
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 24px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 18px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.cerrar {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+@media (max-width: 1000px) {
+  .dos {
+    grid-template-columns: 1fr;
+  }
+
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}

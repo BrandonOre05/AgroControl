@@ -1,0 +1,105 @@
+/* ============================================================
+   pages/salud/salud.css
+   ============================================================ */
+
+.encabezado {
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- KPIS ---------- */
+.kpis {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 16px;
+}
+
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.kpi .icono {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.kpi .icono.verde {
+  background: var(--primario-tenue);
+  color: var(--primario);
+}
+
+.kpi .icono.azul {
+  background: rgba(63, 127, 168, 0.14);
+  color: var(--info);
+}
+
+.kpi .icono.rojo {
+  background: rgba(192, 80, 63, 0.14);
+  color: var(--peligro);
+}
+
+.kpi strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.kpi span {
+  font-size: 11px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ---------- PESTAÑAS ---------- */
+.pestanas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pestanas button {
+  background: var(--card-2);
+  border: 1px solid var(--borde-suave);
+  color: var(--texto-suave);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pestanas button.activa {
+  background: var(--primario-tenue);
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 800px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,196 @@
+/* ============================================================
+   pages/inventario/inventario.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- KPIS ---------- */
+.kpis {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 16px;
+}
+
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.kpi .icono {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.kpi .icono.verde {
+  background: var(--primario-tenue);
+  color: var(--primario);
+}
+
+.kpi .icono.ambar {
+  background: rgba(201, 138, 18, 0.14);
+  color: var(--alerta);
+}
+
+.kpi .icono.azul {
+  background: rgba(63, 127, 168, 0.14);
+  color: var(--info);
+}
+
+.kpi strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.kpi span {
+  font-size: 11px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ---------- FILTROS ---------- */
+.filtros {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filtros input,
+.filtros select {
+  padding: 9px 12px;
+  background: var(--fondo-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  color: var(--texto);
+  font-size: 13px;
+  outline: none;
+}
+
+.filtros input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filtros input::placeholder {
+  color: var(--texto-tenue);
+}
+
+.aviso {
+  background: var(--primario-tenue);
+  border: 1px solid rgba(63, 122, 82, 0.3);
+  color: var(--primario);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.acciones {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ---------- MODALES ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100% - 32px));
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 24px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 18px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.cerrar {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 18px 0 8px;
+}
+
+.movimientos {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.movimientos li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--texto-medio);
+}
+
+.movimientos .texto-suave {
+  flex: 1;
+  text-align: right;
+}
+
+@media (max-width: 800px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}

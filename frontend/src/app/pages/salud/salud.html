@@ -1,0 +1,102 @@
+<header class="encabezado">
+  <div>
+    <h1>Salud</h1>
+    <p class="texto-suave">Vacunas, controles y pesajes programados de los animales.</p>
+  </div>
+</header>
+
+<!-- ===== TARJETAS DE RESUMEN ===== -->
+<div class="rejilla kpis">
+  <div class="card kpi">
+    <div class="icono verde"><app-icono nombre="salud" [tamano]="18" /></div>
+    <div>
+      <strong>{{ totalVacunas() }}</strong>
+      <span>Vacunas próximas</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono azul"><app-icono nombre="check" [tamano]="18" /></div>
+    <div>
+      <strong>{{ totalControles() }}</strong>
+      <span>Controles próximos</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono rojo"><app-icono nombre="alertas" [tamano]="18" /></div>
+    <div>
+      <strong>{{ requierenAtencion() }}</strong>
+      <span>Requieren atención</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PERIODO ===== -->
+<div class="pestanas">
+  <button
+    [class.activa]="dias() === periodo"
+    (click)="cambiarPeriodo(periodo)"
+    *ngFor="let periodo of [7, 15, 30, 90]"
+  >
+    Próximos {{ periodo }} días
+  </button>
+</div>
+
+<p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+<!-- ===== TABLA ===== -->
+<div class="card">
+  <p class="texto-suave pequeno" *ngIf="cargando()">Cargando resumen sanitario...</p>
+
+  <p class="texto-suave pequeno" *ngIf="!cargando() && animales().length === 0">
+    No hay animales activos registrados.
+  </p>
+
+  <table class="tabla" *ngIf="!cargando() && animales().length > 0">
+    <thead>
+      <tr>
+        <th>Animal</th>
+        <th>Especie</th>
+        <th>Vacunas próximas</th>
+        <th>Controles próximos</th>
+        <th>Último pesaje</th>
+        <th>Índice</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let animal of animales()">
+        <td>
+          <strong>{{ animal.codigo }}</strong>
+
+          <span class="texto-suave" *ngIf="animal.nombre"> · {{ animal.nombre }}</span>
+        </td>
+        <td class="texto-suave">{{ animal.especie }}</td>
+        <td>
+          <span class="badge badge-alerta" *ngIf="animal.proximas_vacunas > 0">{{
+            animal.proximas_vacunas
+          }}</span>
+
+          <span class="texto-suave pequeno" *ngIf="!(animal.proximas_vacunas > 0)">-</span>
+        </td>
+        <td>
+          <span class="badge badge-info" *ngIf="animal.proximos_controles > 0">{{
+            animal.proximos_controles
+          }}</span>
+
+          <span class="texto-suave pequeno" *ngIf="!(animal.proximos_controles > 0)">-</span>
+        </td>
+        <td class="texto-suave">{{ fecha(animal.ultimo_pesaje) }}</td>
+        <td>
+          <span class="badge" [class]="claseIndice(animal.estado_indice)">
+            {{ animal.estado_indice }}
+          </span>
+        </td>
+        <td>
+          <a class="btn btn-fantasma btn-sm" [routerLink]="['/animales', animal.id_animal]">
+            Ficha
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

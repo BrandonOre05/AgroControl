@@ -1,0 +1,75 @@
+<header class="encabezado">
+  <div>
+    <h1>Alertas</h1>
+    <p class="texto-suave">Alertas activas y su estado de resolución.</p>
+  </div>
+
+  <button class="btn btn-fantasma" (click)="cargar()">Actualizar</button>
+</header>
+
+<!-- ===== RESUMEN POR SEVERIDAD ===== -->
+<div class="rejilla resumen">
+  <div class="card mini">
+    <span class="punto punto-peligro"></span>
+    <div>
+      <strong>{{ criticas() }}</strong>
+      <span>Críticas</span>
+    </div>
+  </div>
+  <div class="card mini">
+    <span class="punto punto-alerta"></span>
+    <div>
+      <strong>{{ advertencias() }}</strong>
+      <span>Advertencias</span>
+    </div>
+  </div>
+  <div class="card mini">
+    <span class="punto" style="background: var(--info)"></span>
+    <div>
+      <strong>{{ informativas() }}</strong>
+      <span>Informativas</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LISTA DE ALERTAS ===== -->
+
+<p class="texto-suave" *ngIf="cargando()">Cargando alertas...</p>
+
+<div class="card error" *ngIf="!cargando() && error()">{{ error() }}</div>
+
+<div class="card vacio" *ngIf="!cargando() && !error() && alertas().length === 0">
+  <div class="vacio-icono"><app-icono nombre="check" [tamano]="26" /></div>
+  <h2>Todo en orden</h2>
+  <p>No hay alertas activas en este momento.</p>
+</div>
+
+<div class="columna" *ngIf="!cargando() && !error() && alertas().length > 0">
+  <article class="card alerta" *ngFor="let alerta of alertas()">
+    <!-- Icono del tipo -->
+    <div class="alerta-icono" [class]="colorTipo(alerta.tipo)">
+      <app-icono [nombre]="iconoTipo(alerta.tipo)" [tamano]="18" />
+    </div>
+
+    <!-- Texto -->
+    <div class="alerta-texto">
+      <div class="fila">
+        <h2>{{ titulo(alerta.tipo) }}</h2>
+        <span class="badge" [class]="claseSeveridad(alerta.severidad)">
+          {{ alerta.severidad }}
+        </span>
+      </div>
+      <p>{{ alerta.mensaje }}</p>
+    </div>
+
+    <!-- Acciones -->
+
+    <div class="alerta-acciones" *ngIf="puedeResolver()">
+      <button class="btn btn-fantasma btn-sm" (click)="cerrar(alerta, 'RESUELTA')">
+        <app-icono nombre="check" [tamano]="13" />
+        Marcar resuelta
+      </button>
+      <button class="btn btn-fantasma btn-sm" (click)="cerrar(alerta, 'IGNORADA')">Ignorar</button>
+    </div>
+  </article>
+</div>

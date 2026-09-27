@@ -1,0 +1,152 @@
+/* ============================================================
+   pages/usuarios/usuarios.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.error-general {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- TABLA ---------- */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primario-tenue);
+  color: var(--primario);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.nombre {
+  display: block;
+  font-size: 13px;
+  color: var(--texto);
+}
+
+.correo {
+  display: block;
+  font-size: 11px;
+  color: var(--texto-tenue);
+}
+
+.select-rol {
+  padding: 6px 9px;
+  background: var(--fondo-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  color: var(--texto-medio);
+  font-size: 12px;
+  outline: none;
+  font-weight: 600;
+}
+
+.select-rol:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.acciones {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.icono-boton {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  padding: 6px;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.icono-boton:hover:not(:disabled) {
+  background: var(--card-2);
+  color: var(--texto);
+}
+
+.icono-boton.peligro:hover:not(:disabled) {
+  background: rgba(192, 80, 63, 0.14);
+  color: var(--peligro);
+}
+
+.icono-boton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nota {
+  margin-top: 12px;
+  color: var(--texto-tenue);
+}
+
+/* ---------- MODAL ---------- */
+.capa {
+  position: fixed;
+  inset: 0;
+  background: var(--tapa);
+  z-index: 60;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100% - 32px));
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--card-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 24px;
+  z-index: 61;
+  box-shadow: var(--sombra);
+}
+
+.modal-cabecera {
+  margin-bottom: 18px;
+}
+
+.modal-cabecera h2 {
+  font-size: 17px;
+}
+
+.modal-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.ayuda {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  margin-top: 5px;
+}

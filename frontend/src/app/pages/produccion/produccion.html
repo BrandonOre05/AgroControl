@@ -1,0 +1,146 @@
+<header class="encabezado">
+  <div>
+    <h1>Producción</h1>
+    <p class="texto-suave">Registra y consulta la producción de leche, peso y cosechas.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="modalAbierto.set(true)" *ngIf="puedeRegistrar()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Registrar producción
+  </button>
+</header>
+
+<!-- ===== TARJETAS DE TOTALES ===== -->
+<div class="rejilla kpis">
+  <div class="card kpi">
+    <div class="icono verde"><app-icono nombre="produccion" [tamano]="18" /></div>
+    <div>
+      <strong>{{ numero(total('LECHE')) }}</strong>
+      <span>{{ unidadDe('LECHE') || 'litros' }} de leche</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono azul"><app-icono nombre="animales" [tamano]="18" /></div>
+    <div>
+      <strong>{{ numero(total('PESO')) }}</strong>
+      <span>{{ unidadDe('PESO') || 'kg' }} de peso</span>
+    </div>
+  </div>
+  <div class="card kpi">
+    <div class="icono ambar"><app-icono nombre="cultivos" [tamano]="18" /></div>
+    <div>
+      <strong>{{ numero(resumen()?.cosecha_agricola) }}</strong>
+      <span>kg cosechados</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILTRO DE PERIODO ===== -->
+<div class="pestanas">
+  <button
+    [class.activa]="dias() === periodo.valor"
+    (click)="cambiarPeriodo(periodo.valor)"
+    *ngFor="let periodo of periodos"
+  >
+    Últimos {{ periodo.etiqueta }}
+  </button>
+</div>
+
+<p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+<!-- ===== GRÁFICA + RANKING ===== -->
+<div class="rejilla dos">
+  <div class="card">
+    <h2 class="card-titulo">Producción de leche</h2>
+
+    <p class="texto-suave pequeno" *ngIf="cargando()">Cargando...</p>
+
+    <p class="texto-suave pequeno" *ngIf="!cargando() && (resumen()?.por_dia?.length ?? 0) === 0">
+      Todavía no hay producción registrada en este periodo.
+    </p>
+
+    <div class="grafica" *ngIf="!cargando() && (resumen()?.por_dia?.length ?? 0) > 0">
+      <div class="barra" *ngFor="let dia of resumen()?.por_dia">
+        <div
+          class="barra-valor"
+          [style.height.%]="alturaBarra(dia.total)"
+          [title]="dia.total + ' L'"
+        >
+          <span class="barra-cantidad">{{ dia.total }}</span>
+        </div>
+        <span class="barra-dia">{{ etiquetaDia(dia.fecha) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-titulo">Top de producción</h2>
+
+    <p class="texto-suave pequeno" *ngIf="(resumen()?.top_animales?.length ?? 0) === 0">
+      Sin datos todavía.
+    </p>
+
+    <ol class="ranking" *ngIf="(resumen()?.top_animales?.length ?? 0) > 0">
+      <li *ngFor="let animal of resumen()?.top_animales; index as i">
+        <span class="medalla">{{ i + 1 }}</span>
+        <div>
+          <strong>{{ animal.nombre ?? animal.codigo }}</strong>
+          <span class="texto-suave pequeno">{{ animal.codigo }}</span>
+        </div>
+        <span class="cantidad"> {{ numero(animal.total) }} {{ animal.unidad }} </span>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<!-- ===== MODAL: REGISTRAR PRODUCCIÓN ===== -->
+<ng-container *ngIf="modalAbierto()">
+  <div class="capa" (click)="modalAbierto.set(false)"></div>
+
+  <div class="modal">
+    <div class="fila-between modal-cabecera">
+      <h2>Registrar producción de leche</h2>
+      <button class="cerrar" (click)="modalAbierto.set(false)">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Animal</label>
+      <select [ngModel]="idAnimal()" (ngModelChange)="idAnimal.set($event)">
+        <option [ngValue]="null">Selecciona un animal...</option>
+
+        <option [ngValue]="animal.id_animal" *ngFor="let animal of animales()">
+          {{ animal.codigo }} - {{ animal.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Cantidad (litros)</label>
+        <input
+          type="number"
+          step="0.1"
+          [ngModel]="cantidad()"
+          (ngModelChange)="cantidad.set($event)"
+        />
+      </div>
+      <div class="campo" style="flex: 1">
+        <label>Fecha</label>
+        <input
+          type="date"
+          [ngModel]="fechaRegistro()"
+          (ngModelChange)="fechaRegistro.set($event)"
+        />
+      </div>
+    </div>
+
+    <p class="aviso" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="modalAbierto.set(false)">Cancelar</button>
+      <button class="btn btn-primario" (click)="guardar()" [disabled]="guardando() || !idAnimal()">
+        Guardar
+      </button>
+    </div>
+  </div>
+</ng-container>

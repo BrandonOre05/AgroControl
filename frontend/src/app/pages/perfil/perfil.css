@@ -1,0 +1,137 @@
+/* ============================================================
+   pages/perfil/perfil.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.dos {
+  grid-template-columns: 1.4fr 1fr;
+  align-items: start;
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Cabecera con avatar ---------- */
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.avatar-grande {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--primario);
+  color: #f4f9f2;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cabecera h2 {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.cabecera p {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* ---------- Datos ---------- */
+.datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 20px;
+}
+
+.datos dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--texto-tenue);
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.datos dd {
+  font-size: 13px;
+  color: var(--texto);
+}
+
+/* ---------- Permisos del rol ---------- */
+.permisos {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.permisos li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--texto-medio);
+  line-height: 1.5;
+}
+
+.permisos .punto {
+  margin-top: 6px;
+}
+
+/* ---------- Mensajes ---------- */
+.aviso {
+  background: var(--primario-tenue);
+  border: 1px solid rgba(63, 122, 82, 0.3);
+  color: var(--primario);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.rojo {
+  background: rgba(192, 80, 63, 0.12);
+  border: 1px solid rgba(192, 80, 63, 0.35);
+  color: var(--peligro);
+  padding: 9px 12px;
+  border-radius: var(--radio-sm);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+  .dos {
+    grid-template-columns: 1fr;
+  }
+
+  .datos {
+    grid-template-columns: 1fr;
+  }
+}

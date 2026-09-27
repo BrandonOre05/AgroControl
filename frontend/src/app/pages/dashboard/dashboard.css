@@ -1,0 +1,293 @@
+/* ============================================================
+   pages/dashboard/dashboard.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.encabezado h1 {
+  font-size: 22px;
+  letter-spacing: -0.3px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.fecha {
+  font-size: 12px;
+  color: var(--texto-suave);
+  background: var(--card-2);
+  border: 1px solid var(--borde-suave);
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.cargando {
+  color: var(--texto-suave);
+  padding: 40px 0;
+  text-align: center;
+}
+
+.error {
+  border-color: rgba(192, 80, 63, 0.4);
+  color: var(--peligro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- TARJETAS DE INDICADORES ---------- */
+.tarjetas {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 16px;
+}
+
+.indicador {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.icono-indicador {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.icono-indicador.verde {
+  background: var(--primario-tenue);
+  color: var(--primario);
+}
+
+.etiqueta {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.valor {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--texto);
+}
+
+.detalle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--texto-tenue);
+}
+
+/* ---------- FILA INFERIOR ---------- */
+.inferior {
+  grid-template-columns: 1.2fr 1.2fr 1.2fr;
+  align-items: start;
+}
+
+/* ---------- DONA DEL ÍNDICE ---------- */
+.dona-zona {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.dona {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.dona-centro {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  /* Opaco a proposito: va ENCIMA de la grafica de colores */
+  background: #fbfdfa;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.dona-centro strong {
+  font-size: 22px;
+  display: block;
+  line-height: 1.1;
+}
+
+.dona-centro span {
+  font-size: 10px;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.leyenda {
+  list-style: none;
+  flex: 1;
+}
+
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--texto-medio);
+}
+
+.leyenda span {
+  flex: 1;
+}
+
+/* ---------- BARRAS POR ESPECIE ---------- */
+.barras {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.barra-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.barra-etiqueta {
+  width: 90px;
+  color: var(--texto-medio);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barra-pista {
+  flex: 1;
+  height: 8px;
+  background: var(--fondo-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra-valor {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primario-fuerte), var(--primario));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.barra-fila strong {
+  width: 26px;
+  text-align: right;
+  color: var(--texto);
+}
+
+/* ---------- ALERTAS ---------- */
+.lista-alertas {
+  list-style: none;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lista-alertas li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.lista-alertas li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.lista-alertas p {
+  font-size: 12px;
+  color: var(--texto-medio);
+  line-height: 1.5;
+}
+
+.lista-alertas .badge {
+  flex-shrink: 0;
+  font-size: 9px;
+  padding: 3px 7px;
+}
+
+/* ---------- CIFRAS PENDIENTES ---------- */
+.lista-cifras {
+  list-style: none;
+}
+
+.lista-cifras li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--borde-suave);
+  font-size: 12px;
+  color: var(--texto-medio);
+}
+
+.lista-cifras li:last-child {
+  border-bottom: none;
+}
+
+.lista-cifras strong {
+  font-size: 16px;
+  color: var(--texto);
+}
+
+.texto-alerta {
+  color: var(--alerta) !important;
+}
+
+.texto-peligro {
+  color: var(--peligro) !important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1100px) {
+  .tarjetas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .inferior {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .tarjetas,
+  .inferior {
+    grid-template-columns: 1fr;
+  }
+
+  .dona-zona {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

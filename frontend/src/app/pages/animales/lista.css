@@ -1,0 +1,81 @@
+/* ============================================================
+   pages/animales/lista.css
+   ============================================================ */
+
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.encabezado h1 {
+  font-size: 21px;
+}
+
+.encabezado p {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ---------- FILTROS ---------- */
+.filtros {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filtros input {
+  flex: 1;
+  min-width: 220px;
+  padding: 9px 12px;
+  background: var(--fondo-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  color: var(--texto);
+  font-size: 13px;
+  outline: none;
+}
+
+.filtros input:focus {
+  border-color: var(--primario);
+}
+
+.filtros input::placeholder {
+  color: var(--texto-tenue);
+}
+
+.filtros select {
+  padding: 9px 12px;
+  background: var(--fondo-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  color: var(--texto);
+  font-size: 13px;
+  outline: none;
+}
+
+/* ---------- TABLA ---------- */
+.fuente-codigo {
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.vacio {
+  text-align: center;
+  padding: 34px 10px;
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+.vacio p {
+  margin-bottom: 12px;
+}
+
+.error-texto {
+  color: var(--peligro);
+  font-size: 13px;
+}

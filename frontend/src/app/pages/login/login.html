@@ -1,0 +1,91 @@
+<div class="login">
+  <!-- ===== Lado izquierdo: presentación ===== -->
+  <section class="presentacion">
+    <div class="marca">
+      <div class="marca-icono">
+        <app-icono nombre="cultivos" [tamano]="24" />
+      </div>
+      <span>AgroControl</span>
+    </div>
+
+    <h1>Tu finca, en un solo lugar.</h1>
+    <p>
+      Administra, controla y da seguimiento de animales, cultivos e inventario en tu propia finca.
+    </p>
+
+    <!-- Hojas decorativas (el fondo del diseño es una foto de follaje;
+         aquí se simula con capas de degradados) -->
+    <div class="hojas" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== Lado derecho: formulario ===== -->
+  <section class="formulario">
+    <div class="tarjeta">
+      <h2>Bienvenido de nuevo</h2>
+      <p class="subtitulo">Inicia sesión para entrar a tu finca</p>
+
+      <!-- [formGroup] es obligatorio: conecta el <form> con el formulario
+           del componente. Sin esto, el form hace el submit nativo de HTML
+           (recarga la página) y Angular no intercepta nada. -->
+      <form [formGroup]="form" (ngSubmit)="entrar()">
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input
+            id="correo"
+            type="email"
+            formControlName="correo"
+            placeholder="tu@correo.com"
+            autocomplete="username"
+          />
+
+          <p
+            class="campo-error"
+            *ngIf="form.controls.correo.touched && form.controls.correo.invalid"
+          >
+            Escribe un correo válido
+          </p>
+        </div>
+
+        <div class="campo">
+          <label for="password">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+
+          <p
+            class="campo-error"
+            *ngIf="form.controls.password.touched && form.controls.password.invalid"
+          >
+            La contraseña es obligatoria
+          </p>
+        </div>
+
+        <div class="fila-entre opciones">
+          <label class="recordar">
+            <input type="checkbox" checked />
+            Recordarme
+          </label>
+          <a href="#" (click)="$event.preventDefault()">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+        <button class="btn btn-primario boton" type="submit" [disabled]="cargando()">
+          <span *ngIf="cargando()"> Iniciando sesión... </span
+          ><span *ngIf="!cargando()"> Iniciar sesión </span>
+        </button>
+      </form>
+
+      <!--
+        Aquí NO hay registro público: las cuentas las crea el
+        administrador desde la pantalla "Usuarios". Por eso no
+        existe un enlace de "Regístrate aquí".
+      -->
+      <p class="pie">Acceso únicamente para personal autorizado de la finca.</p>
+    </div>
+  </section>
+</div>

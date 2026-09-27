@@ -1,0 +1,187 @@
+<header class="encabezado">
+  <div>
+    <h1>Usuarios</h1>
+    <p class="texto-suave">Administra las cuentas y los roles de acceso al sistema.</p>
+  </div>
+
+  <button class="btn btn-primario" (click)="abrirCrear()">
+    <app-icono nombre="mas" [tamano]="15" />
+    Nuevo usuario
+  </button>
+</header>
+
+<p class="error-general" *ngIf="error()">{{ error() }}</p>
+
+<!-- ===== TARJETA CON LA TABLA ===== -->
+<div class="card">
+  <p class="texto-suave pequeno" *ngIf="cargando()">Cargando usuarios...</p>
+
+  <p class="texto-suave pequeno" *ngIf="!cargando() && usuarios().length === 0">
+    No hay usuarios registrados.
+  </p>
+  <ng-container *ngIf="!cargando() && usuarios().length > 0">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Último acceso</th>
+          <th style="text-align: right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios()">
+          <!-- Nombre + correo + inicial -->
+          <td>
+            <div class="fila">
+              <div class="avatar">{{ usuario.nombre.charAt(0) }}</div>
+              <div>
+                <strong class="nombre">{{ usuario.nombre }}</strong>
+                <span class="correo">{{ usuario.correo }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Rol: se cambia directo con el select -->
+          <td>
+            <select
+              class="select-rol"
+              [ngModel]="usuario.rol"
+              (ngModelChange)="cambiarRol(usuario, $event)"
+              [disabled]="usuario.id_usuario === miId"
+            >
+              <option value="ADMIN">ADMIN</option>
+              <option value="ENCARGADO">ENCARGADO</option>
+              <option value="TRABAJADOR">TRABAJADOR</option>
+            </select>
+          </td>
+
+          <td>
+            <span class="badge" [class]="claseEstado(usuario.estado)">
+              {{ usuario.estado }}
+            </span>
+          </td>
+
+          <td class="texto-suave">{{ fecha(usuario.ultimo_login) }}</td>
+
+          <!-- Acciones -->
+          <td>
+            <div class="acciones">
+              <button class="icono-boton" title="Editar" (click)="abrirEditar(usuario)">
+                <app-icono nombre="editar" [tamano]="15" />
+              </button>
+
+              <button
+                class="icono-boton"
+                [title]="usuario.estado === 'ACTIVO' ? 'Desactivar' : 'Activar'"
+                (click)="cambiarEstado(usuario)"
+                [disabled]="usuario.id_usuario === miId"
+              >
+                <app-icono
+                  [nombre]="usuario.estado === 'ACTIVO' ? 'salir' : 'check'"
+                  [tamano]="15"
+                />
+              </button>
+
+              <button
+                class="icono-boton peligro"
+                title="Desactivar cuenta"
+                (click)="eliminar(usuario)"
+                [disabled]="usuario.id_usuario === miId"
+              >
+                <app-icono nombre="borrar" [tamano]="15" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="texto-suave pequeno nota">
+      Tu propia cuenta ({{ miId }}) no se puede desactivar, cambiar de rol ni borrar.
+    </p>
+  </ng-container>
+</div>
+
+<!-- ===== FORMULARIO (modal) ===== -->
+<ng-container *ngIf="modalAbierto()">
+  <div class="capa" (click)="cerrarModal()"></div>
+
+  <div class="modal">
+    <div class="fila-entre modal-cabecera">
+      <h2>{{ editando() ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+      <button class="icono-boton" (click)="cerrarModal()">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Nombre completo</label>
+      <input
+        type="text"
+        [ngModel]="nombre()"
+        (ngModelChange)="nombre.set($event)"
+        placeholder="Nombre y apellido"
+      />
+    </div>
+
+    <!-- El correo no se puede cambiar al editar -->
+
+    <div class="campo" *ngIf="!editando()">
+      <label>Correo electrónico</label>
+      <input
+        type="email"
+        [ngModel]="correo()"
+        (ngModelChange)="correo.set($event)"
+        placeholder="usuario@correo.com"
+      />
+    </div>
+
+    <div class="campo" *ngIf="!!editando()">
+      <label>Correo electrónico</label>
+      <input type="email" [ngModel]="correo()" disabled />
+    </div>
+
+    <!-- La contraseña solo se pide al crear -->
+
+    <div class="campo" *ngIf="!editando()">
+      <label>Contraseña</label>
+      <input
+        type="password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        placeholder="Mínimo 8, mayúscula, minúscula y número"
+      />
+      <p class="ayuda">Mínimo 8 caracteres, con mayúscula, minúscula y número.</p>
+    </div>
+
+    <div class="fila">
+      <div class="campo" style="flex: 1">
+        <label>Rol</label>
+        <select [ngModel]="rol()" (ngModelChange)="rol.set($event)">
+          <option value="TRABAJADOR">TRABAJADOR</option>
+          <option value="ENCARGADO">ENCARGADO</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+      </div>
+
+      <div class="campo" style="flex: 1">
+        <label>Teléfono</label>
+        <input
+          type="text"
+          [ngModel]="telefono()"
+          (ngModelChange)="telefono.set($event)"
+          placeholder="Opcional"
+        />
+      </div>
+    </div>
+
+    <p class="error-general" *ngIf="mensaje()">{{ mensaje() }}</p>
+
+    <div class="modal-pie">
+      <button class="btn btn-fantasma" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn btn-primario" (click)="guardar()" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</ng-container>

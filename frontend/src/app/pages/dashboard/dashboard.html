@@ -1,0 +1,185 @@
+<!-- Encabezado: saludo + fecha de hoy -->
+<header class="encabezado">
+  <div>
+    <h1>¡Hola, {{ nombreUsuario() }}!</h1>
+    <p class="texto-suave">Aquí tienes el resumen del estado de tu finca.</p>
+  </div>
+  <span class="fecha">{{ hoy }}</span>
+</header>
+
+<p class="cargando" *ngIf="cargando()">Cargando información de la finca...</p>
+
+<div class="card error" *ngIf="!cargando() && error()">
+  <p>{{ error() }}</p>
+  <button class="btn btn-fantasma btn-sm" (click)="cargar()">Reintentar</button>
+</div>
+<ng-container *ngIf="!cargando() && !error() && datos() as d">
+  <!-- ===== TARJETAS DE INDICADORES ===== -->
+  <section class="rejilla tarjetas">
+    <article class="card indicador">
+      <div class="icono-indicador verde"><app-icono nombre="animales" [tamano]="18" /></div>
+      <div>
+        <span class="etiqueta">Animales</span>
+        <strong class="valor">{{ d.animales.total }}</strong>
+        <span class="detalle">
+          <i class="punto punto-exito"></i> {{ cantidad('OPTIMO') }} óptimos
+        </span>
+      </div>
+    </article>
+
+    <article class="card indicador">
+      <div class="icono-indicador verde"><app-icono nombre="cultivos" [tamano]="18" /></div>
+      <div>
+        <span class="etiqueta">Cultivos</span>
+        <strong class="valor">{{ d.cultivos.total_activos }}</strong>
+        <span class="detalle">{{ d.cultivos.cosechas_proximas }} cosechas próximas</span>
+      </div>
+    </article>
+
+    <article class="card indicador">
+      <div class="icono-indicador verde"><app-icono nombre="inventario" [tamano]="18" /></div>
+      <div>
+        <span class="etiqueta">Inventario</span>
+        <strong class="valor">{{ formato(d.inventario.total_productos) }}</strong>
+        <span class="detalle">productos registrados</span>
+      </div>
+    </article>
+
+    <article class="card indicador">
+      <div class="icono-indicador verde"><app-icono nombre="produccion" [tamano]="18" /></div>
+      <div>
+        <span class="etiqueta">Producción (30 días)</span>
+        <strong class="valor">{{ formato(d.produccion.leche_ultimos_30_dias) }}</strong>
+        <span class="detalle">litros de leche</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===== GRÁFICA DEL ÍNDICE + ALERTAS + ACTIVIDADES ===== -->
+  <section class="rejilla inferior">
+    <!-- Estado del animal (dona de colores) -->
+    <article class="card">
+      <h2 class="card-titulo">Estado del animal</h2>
+
+      <p class="texto-suave pequeno" *ngIf="d.animales.total === 0">
+        Aún no hay animales registrados.
+      </p>
+
+      <div class="dona-zona" *ngIf="!(d.animales.total === 0)">
+        <div
+          class="dona"
+          [style.background]="
+            'conic-gradient(' +
+            'var(--exito) 0 ' +
+            porcentaje('OPTIMO') +
+            '%, ' +
+            'var(--alerta) ' +
+            porcentaje('OPTIMO') +
+            '% ' +
+            (porcentaje('OPTIMO') + porcentaje('OBSERVACION')) +
+            '%, ' +
+            'var(--peligro) ' +
+            (porcentaje('OPTIMO') + porcentaje('OBSERVACION')) +
+            '% 100%)'
+          "
+        >
+          <div class="dona-centro">
+            <strong>{{ d.animales.total }}</strong>
+            <span>animales</span>
+          </div>
+        </div>
+
+        <ul class="leyenda">
+          <li>
+            <i class="punto punto-exito"></i>
+            <span>Óptimo</span>
+            <strong>{{ cantidad('OPTIMO') }}</strong>
+          </li>
+          <li>
+            <i class="punto punto-alerta"></i>
+            <span>Observación</span>
+            <strong>{{ cantidad('OBSERVACION') }}</strong>
+          </li>
+          <li>
+            <i class="punto punto-peligro"></i>
+            <span>Atención</span>
+            <strong>{{ cantidad('ATENCION') }}</strong>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Producción por especie (barras) -->
+    <article class="card">
+      <h2 class="card-titulo">Animales por especie</h2>
+
+      <p class="texto-suave pequeno" *ngIf="d.animales.por_especie.length === 0">
+        Sin datos todavía.
+      </p>
+
+      <div class="barras" *ngIf="d.animales.por_especie.length > 0">
+        <div class="barra-fila" *ngFor="let especie of d.animales.por_especie">
+          <span class="barra-etiqueta">{{ especie.etiqueta }}</span>
+          <div class="barra-pista">
+            <div
+              class="barra-valor"
+              [style.width.%]="
+                d.animales.total > 0 ? (especie.cantidad / d.animales.total) * 100 : 0
+              "
+            ></div>
+          </div>
+          <strong>{{ especie.cantidad }}</strong>
+        </div>
+      </div>
+    </article>
+
+    <!-- Alertas activas -->
+
+    <article class="card" *ngIf="puedeVerAlertas()">
+      <div class="fila-entre">
+        <h2 class="card-titulo" style="margin: 0">Alertas activas</h2>
+        <span class="badge" [class]="claseSeveridad('CRITICA')">
+          {{ d.alertas.total }} en total
+        </span>
+      </div>
+
+      <p class="texto-suave pequeno" *ngIf="alertas().length === 0">
+        Todo en orden. No hay alertas activas.
+      </p>
+
+      <ul class="lista-alertas" *ngIf="alertas().length > 0">
+        <li *ngFor="let alerta of alertas()">
+          <span class="badge" [class]="claseSeveridad(alerta.severidad)">
+            {{ alerta.severidad }}
+          </span>
+          <p>{{ alerta.mensaje }}</p>
+        </li>
+      </ul>
+    </article>
+
+    <!-- Resumen de tareas -->
+    <article class="card">
+      <h2 class="card-titulo">Pendientes</h2>
+      <ul class="lista-cifras">
+        <li>
+          <span>Actividades pendientes</span>
+          <strong>{{ d.actividades_pendientes }}</strong>
+        </li>
+        <li>
+          <span>Controles próximos (30 días)</span>
+          <strong>{{ d.controles_proximos_30_dias }}</strong>
+        </li>
+        <ng-container *ngIf="puedeVerInventario()">
+          <li>
+            <span>Productos con stock bajo</span>
+            <strong class="texto-alerta">{{ d.inventario.stock_bajo }}</strong>
+          </li>
+          <li>
+            <span>Productos agotados</span>
+            <strong class="texto-peligro">{{ d.inventario.agotados }}</strong>
+          </li>
+        </ng-container>
+      </ul>
+    </article>
+  </section>
+</ng-container>
