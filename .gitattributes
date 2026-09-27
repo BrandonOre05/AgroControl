@@ -1,0 +1,17 @@
+# Fin de linea en el repositorio: LF (el estandar)
+# Asi no aparecen avisos de "CRLF will be replaced by LF"
+# y los diffs se ven igual en cualquier computador.
+* text=auto eol=lf
+
+# Archivos que SI deben estar en CRLF en Windows
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Los binarios no se tocan
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
