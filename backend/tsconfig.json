@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    // ES2020 = sintaxis moderna (async/await, optional chaining, etc.)
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": "src",
+    // strict = TypeScript avisa errores que en JavaScript pasarían desapercibidos
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

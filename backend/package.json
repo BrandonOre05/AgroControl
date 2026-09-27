@@ -1,0 +1,38 @@
+{
+  "name": "agrocontrol-backend",
+  "version": "1.0.0",
+  "description": "API REST de AgroControl: Node.js + Express + TypeScript + MySQL",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "crear-admin": "tsx src/scripts/crearAdmin.ts",
+    "crear-finca": "tsx src/scripts/crearFinca.ts",
+    "datos-demo": "tsx src/scripts/datosDemo.ts",
+    "datos-demo-2": "tsx src/scripts/datosDemo2.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.2",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
