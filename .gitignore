@@ -1,0 +1,24 @@
+# Dependencias
+node_modules/
+
+# Compilación
+dist/
+.angular/
+coverage/
+
+# Secretos (contraseñas, JWT_SECRET...)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.tsbuildinfo
